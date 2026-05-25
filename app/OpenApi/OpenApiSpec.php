@@ -6,13 +6,20 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Info(
- *     version="1.0.0",
- *     title="Laravel 12 Swagger API"
+ * version="1.0.0",
+ * title="Laravel 12 Swagger API"
  * )
  *
  * @OA\Server(
- *     url="http://localhost:8000",
- *     description="Local Server"
+ * url="http://localhost:8000",
+ * description="Local Server"
+ * )
+ *
+ * @OA\SecurityScheme(
+ * securityScheme="bearerAuth",
+ * type="http",
+ * scheme="bearer",
+ * bearerFormat="JWT"
  * )
  */
 class OpenApiSpec
