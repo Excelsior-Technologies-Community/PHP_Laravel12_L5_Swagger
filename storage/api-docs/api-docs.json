@@ -2,37 +2,71 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Laravel 12 Swagger API",
+        "description": "Complete API with Users, Products, Categories",
         "version": "1.0.0"
     },
     "servers": [
         {
-            "url": "http://localhost:8000",
+            "url": "http://localhost:8000/api",
             "description": "Local Server"
         }
     ],
     "paths": {
-        "/api/products": {
+        "/api/categories": {
             "get": {
                 "tags": [
-                    "Products"
+                    "Categories"
                 ],
-                "summary": "Get all products with search & pagination",
-                "operationId": "d97d1c3727cbac49708b85f7d11f7d58",
+                "summary": "Get all categories",
+                "operationId": "getCategories",
+                "responses": {
+                    "200": {
+                        "description": "List of categories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Electronics"
+                                            },
+                                            "slug": {
+                                                "type": "string",
+                                                "example": "electronics"
+                                            },
+                                            "product_count": {
+                                                "type": "integer",
+                                                "example": 15
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get single category details",
+                "operationId": "getCategoryById",
                 "parameters": [
                     {
-                        "name": "search",
-                        "in": "query",
-                        "description": "Search product by name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Pagination page number",
-                        "required": false,
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category ID",
+                        "required": true,
                         "schema": {
                             "type": "integer"
                         }
@@ -40,7 +74,81 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success"
+                        "description": "Category details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Electronics"
+                                        },
+                                        "slug": {
+                                            "type": "string",
+                                            "example": "electronics"
+                                        },
+                                        "product_count": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Electronic items"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                }
+            }
+        },
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get list of products",
+                "operationId": "getProducts",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Gaming Laptop"
+                                            },
+                                            "price": {
+                                                "type": "integer",
+                                                "example": 75000
+                                            },
+                                            "category": {
+                                                "type": "string",
+                                                "example": "Electronics"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -48,8 +156,8 @@
                 "tags": [
                     "Products"
                 ],
-                "summary": "Create product",
-                "operationId": "785644b7d7dd38af4b51dafd0fbc1b6d",
+                "summary": "Create new product",
+                "operationId": "createProduct",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -62,11 +170,15 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "Laptop"
+                                        "example": "New Product"
                                     },
                                     "price": {
                                         "type": "integer",
-                                        "example": 50000
+                                        "example": 10000
+                                    },
+                                    "category": {
+                                        "type": "string",
+                                        "example": "Electronics"
                                     }
                                 },
                                 "type": "object"
@@ -75,8 +187,33 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Created"
+                    "201": {
+                        "description": "Product created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 100
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "New Product"
+                                        },
+                                        "price": {
+                                            "type": "integer",
+                                            "example": 10000
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -110,27 +247,22 @@
             }
         }
     },
-    "components": {
-        "securitySchemes": {
-            "bearerAuth": {
-                "type": "http",
-                "bearerFormat": "JWT",
-                "scheme": "bearer"
-            }
-        }
-    },
     "tags": [
         {
-            "name": "Products",
-            "description": "Products"
+            "name": "Users",
+            "description": "User management endpoints"
         },
         {
-            "name": "Users",
-            "description": "Users"
+            "name": "Products",
+            "description": "Product management endpoints"
+        },
+        {
+            "name": "Categories",
+            "description": "Category management endpoints"
         },
         {
             "name": "Test",
-            "description": "Test"
+            "description": "Test endpoints"
         }
     ]
 }
